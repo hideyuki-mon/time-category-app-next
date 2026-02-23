@@ -41,14 +41,14 @@ export function TodaySummaryScreen() {
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-140px)] bg-white text-zinc-800 max-w-lg mx-auto">
+    <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 max-w-lg mx-auto bg-[#1a1a22] text-[#e8e8f0]">
       {/* 1. アプリタイトル（中央） */}
-      <h2 className="text-lg font-bold text-center pt-6 pb-2 text-zinc-800">
+      <h2 className="text-lg font-bold text-center pt-6 pb-2 text-white">
         時間カテゴリ管理アプリ
       </h2>
 
       {/* 2. 日付（カレンダーアイコン + 日付、中央） */}
-      <div className="flex items-center justify-center gap-2 text-sm text-zinc-600 mb-6">
+      <div className="flex items-center justify-center gap-2 text-sm text-zinc-400 mb-6">
         <span>📅</span>
         <span>{formatDate(dt)}</span>
       </div>
@@ -90,7 +90,7 @@ export function TodaySummaryScreen() {
                 className="w-3 h-3 rounded-full flex-shrink-0"
                 style={{ backgroundColor: entry.color }}
               />
-              <span className="text-sm text-zinc-800">{entry.name}</span>
+              <span className="text-sm text-zinc-100">{entry.name}</span>
             </div>
           ))}
         </div>
@@ -98,13 +98,13 @@ export function TodaySummaryScreen() {
 
       {/* 5. 合計時間（中央） 「合計 0:02」形式 */}
       <div className="text-center mb-4">
-        <span className="text-sm text-zinc-600">
-          合計 <span className="font-semibold text-zinc-800 tabular-nums">{formatTime(total)}</span>
+        <span className="text-sm text-zinc-400">
+          合計 <span className="font-semibold text-white tabular-nums">{formatTime(total)}</span>
         </span>
       </div>
 
       {/* 6. 区切り線 */}
-      <hr className="border-zinc-200 mx-4 mb-4" />
+      <hr className="border-zinc-600 mx-4 mb-4" />
 
       {/* 7. カテゴリ内訳（左：色+名前、右：時間(割合%)） */}
       <div className="space-y-3 px-4 mb-6">
@@ -121,9 +121,9 @@ export function TodaySummaryScreen() {
                   className="w-3 h-3 rounded-full flex-shrink-0"
                   style={{ backgroundColor: cat.color }}
                 />
-                <span className="text-zinc-800">{cat.name}</span>
+                <span className="text-zinc-100">{cat.name}</span>
               </div>
-              <span className="tabular-nums text-zinc-600" style={{ fontVariantNumeric: "tabular-nums" }}>
+              <span className="tabular-nums text-zinc-300" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {formatTime(v)} ({pct}%)
               </span>
             </div>
@@ -133,7 +133,7 @@ export function TodaySummaryScreen() {
 
       {/* 8. 今日のひとこと（吹き出しアイコン + ラベル、左揃え） */}
       <div className="px-4 pb-24">
-        <label className="flex items-center gap-2 text-sm text-zinc-800 mb-2">
+        <label className="flex items-center gap-2 text-sm text-zinc-100 mb-2">
           <span>💬</span>
           今日のひとこと
         </label>
@@ -142,7 +142,7 @@ export function TodaySummaryScreen() {
           onChange={(e) => setMemo(e.target.value)}
           onBlur={handleMemoBlur}
           placeholder="振り返りメモを入力..."
-          className="w-full p-3 rounded-lg border border-zinc-300 bg-zinc-50 text-zinc-800 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-zinc-400"
+          className="w-full p-3 rounded-lg border border-zinc-600 bg-zinc-800/50 text-zinc-100 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-zinc-500 placeholder:text-zinc-500"
         />
       </div>
     </div>

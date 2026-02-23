@@ -36,8 +36,8 @@ export function MeasurementScreen() {
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 w-full max-w-lg mx-auto md:max-w-2xl md:px-8 md:py-10">
-      {/* 上段: 日付・タイマー・ステータス（左揃え） */}
-      <div className="mb-6 md:mb-8">
+      {/* 上段: 日付・タイマー・ステータス（中央揃え） */}
+      <div className="mb-6 md:mb-8 text-center">
         <div className="text-sm text-white mb-2 md:text-base">
           📅 {formatDate(dt)}
         </div>

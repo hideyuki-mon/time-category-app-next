@@ -14,7 +14,7 @@ export function TabBar() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-[#1a1a22] border-t border-[#3a3a46] flex justify-around py-2 safe-bottom"
+      className="fixed bottom-0 left-0 right-0 bg-[#24242e] border-t border-[#3a3a46] flex justify-around py-2 safe-bottom"
       style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
     >
       {TABS.map((tab) => (

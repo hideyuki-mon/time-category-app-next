@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: "Tap4",
   description: "1日の時間を4カテゴリで記録・可視化",
   manifest: "/manifest.json",
+  icons: { icon: "/tap4-icon.svg", apple: "/tap4-icon.svg" },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",

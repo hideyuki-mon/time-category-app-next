@@ -122,7 +122,7 @@ export function StatisticsScreen() {
   const totalAvg = [0, 1, 2, 3].reduce((s, c) => s + averages[c as CategoryId], 0);
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-120px)] p-4 pb-24">
+    <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 max-w-lg mx-auto">
       <div className="flex gap-2 mb-4">
         {(["day", "week", "month"] as const).map((p) => (
           <button
@@ -144,7 +144,16 @@ export function StatisticsScreen() {
           <BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#3a3a46" />
             <XAxis dataKey="label" stroke="#8888a0" fontSize={12} />
-            <YAxis stroke="#8888a0" fontSize={12} tickFormatter={(v) => toHours(v).toFixed(1)} />
+            <YAxis
+              stroke="#8888a0"
+              fontSize={12}
+              domain={[0, "auto"]}
+              tickFormatter={(v) => {
+                if (typeof v !== "number" || v < 0) return "0h";
+                const h = toHours(v);
+                return h >= 1 ? `${h.toFixed(1)}h` : `${Math.round(v / 60)}m`;
+              }}
+            />
             <Tooltip formatter={(v) => formatHM(typeof v === 'number' ? v : 0)} />
             <Legend />
             {CATEGORIES.map((cat, i) => (
@@ -158,7 +167,7 @@ export function StatisticsScreen() {
         </ResponsiveContainer>
       </div>
       <div className="space-y-2">
-        <div className="text-sm text-zinc-400">期間平均</div>
+        <div className="text-sm text-zinc-400">期間の平均</div>
         {CATEGORIES.map((cat) => (
           <div key={cat.id} className="flex items-center justify-between text-sm">
             <span
@@ -169,7 +178,7 @@ export function StatisticsScreen() {
           </div>
         ))}
         <div className="pt-2 font-semibold">
-          合計: {formatHM(totalAvg)}
+          合計平均: {formatHM(totalAvg)}
         </div>
       </div>
     </div>

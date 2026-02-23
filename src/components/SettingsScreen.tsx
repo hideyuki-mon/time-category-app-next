@@ -34,7 +34,7 @@ export function SettingsScreen() {
   };
 
   return (
-    <div className="p-4 pb-24">
+    <div className="p-4 pb-24 max-w-lg mx-auto">
       <div className="flex flex-col items-center mb-8">
         <div className="w-16 h-16 rounded-2xl mb-2 bg-zinc-700 flex items-center justify-center text-2xl">
           📱

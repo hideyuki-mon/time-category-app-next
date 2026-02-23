@@ -35,23 +35,25 @@ export function MeasurementScreen() {
   const statusCat = activeCategory !== null ? CATEGORIES[activeCategory]?.name : "";
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-120px)] p-4 pb-24">
-      <div className="text-sm text-zinc-400 mb-2">
+    <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 max-w-lg mx-auto">
+      <div className="text-sm text-white mb-2">
         📅 {formatDate(dt)}
       </div>
       <div
-        className="text-4xl font-bold mb-2 tabular-nums"
+        className="text-4xl font-bold mb-2 tabular-nums text-white"
         style={{ fontVariantNumeric: "tabular-nums" }}
       >
         {formatTime(displayTime)}
       </div>
-      <div className="text-sm text-zinc-500 mb-6">
-        {statusCat} {statusText}
+      <div className="text-sm text-[#a0a0b0] mb-6">
+        {statusCat ? `${statusCat} ` : ""}{statusText}
       </div>
       <div className="grid grid-cols-2 gap-3 flex-1">
         {CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat.id;
           const total = todayTotals[cat.id] ?? 0;
+          const hasActive = activeCategory !== null;
+          const isDisabled = hasActive && !isActive;
           return (
             <button
               key={cat.id}
@@ -59,13 +61,14 @@ export function MeasurementScreen() {
               onClick={() => toggleCategory(cat.id)}
               className={`
                 relative flex flex-col items-center justify-center p-4 rounded-xl min-h-[120px]
-                transition-all duration-200
-                ${isActive ? "scale-[1.02] shadow-lg" : "opacity-60"}
+                transition-all duration-200 bg-[#2a2a36]
+                ${isActive ? "scale-[1.02] shadow-lg" : ""}
+                ${isDisabled ? "opacity-50" : "opacity-100"}
               `}
               style={{
-                backgroundColor: isActive ? cat.colorLight : "rgba(255,255,255,0.05)",
                 borderWidth: 2,
-                borderColor: isActive ? cat.color : "transparent",
+                borderStyle: "solid",
+                borderColor: cat.color,
               }}
             >
               {isActive && (
@@ -74,15 +77,12 @@ export function MeasurementScreen() {
                 </span>
               )}
               <span
-                className="font-medium mb-1"
+                className="font-medium mb-1 text-sm"
                 style={{ color: cat.color }}
               >
                 {cat.name}
               </span>
-              <span
-                className="text-2xl font-bold tabular-nums"
-                style={{ fontVariantNumeric: "tabular-nums", color: isActive ? cat.color : undefined }}
-              >
+              <span className="text-2xl font-bold tabular-nums text-white/90" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {formatTime(total + (isActive ? elapsed : 0))}
               </span>
             </button>

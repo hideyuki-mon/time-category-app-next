@@ -48,37 +48,54 @@ export function TodaySummaryScreen() {
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-120px)] p-4 pb-24">
-      <div className="text-sm text-zinc-400 mb-4">📅 {formatDate(dt)}</div>
-      <div className="flex-1 min-h-[200px]">
+    <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 max-w-lg mx-auto">
+      <div className="text-sm text-zinc-400 mb-4">
+        📅 {formatDate(dt)}
+      </div>
+      <div className="flex-1 min-h-[200px] relative">
         {chartData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={220}>
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="50%"
-                innerRadius={65}
-                outerRadius={100}
-                paddingAngle={2}
-                dataKey="value"
+          <>
+            <ResponsiveContainer width="100%" height={220}>
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={65}
+                  outerRadius={100}
+                  paddingAngle={2}
+                  dataKey="value"
+                >
+                  {chartData.map((entry, i) => (
+                    <Cell key={i} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(v) => formatTime(typeof v === "number" ? v : 0)} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+            {/* v0: ドーナツ中央に合計時間を表示 */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+              style={{ marginTop: 8 }}
+            >
+              <span className="text-sm text-zinc-400">合計</span>
+              <span
+                className="text-3xl font-bold tabular-nums text-white"
+                style={{ fontVariantNumeric: "tabular-nums" }}
               >
-                {chartData.map((entry, i) => (
-                  <Cell key={i} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip formatter={(v) => formatTime(typeof v === 'number' ? v : 0)} />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
+                {formatTime(total)}
+              </span>
+            </div>
+          </>
         ) : (
-          <div className="flex items-center justify-center h-48 text-zinc-500 text-sm">
-            データがありません
+          <div className="flex flex-col items-center justify-center h-48 text-zinc-500 text-sm">
+            <span className="mb-2">データがありません</span>
+            <span className="text-xl font-bold tabular-nums" style={{ fontVariantNumeric: "tabular-nums" }}>
+              合計 0:00
+            </span>
           </div>
         )}
-      </div>
-      <div className="text-2xl font-bold text-center my-4 tabular-nums" style={{ fontVariantNumeric: "tabular-nums" }}>
-        合計 {formatTime(total)}
       </div>
       <div className="space-y-2">
         {CATEGORIES.map((cat) => {
@@ -104,7 +121,7 @@ export function TodaySummaryScreen() {
           value={memo}
           onChange={(e) => setMemo(e.target.value)}
           onBlur={handleMemoBlur}
-          placeholder="メモを入力..."
+          placeholder="振り返りメモを入力..."
           className="w-full p-3 rounded-lg border border-zinc-600 bg-zinc-800/50 text-zinc-100 min-h-[80px]"
         />
       </div>

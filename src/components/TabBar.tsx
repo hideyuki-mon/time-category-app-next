@@ -14,7 +14,7 @@ export function TabBar() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 bg-zinc-900 border-t border-zinc-700 flex justify-around py-2 safe-bottom"
+      className="fixed bottom-0 left-0 right-0 bg-[#1a1a22] border-t border-[#3a3a46] flex justify-around py-2 safe-bottom"
       style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
     >
       {TABS.map((tab) => (
@@ -22,14 +22,14 @@ export function TabBar() {
           key={tab.id}
           type="button"
           onClick={() => setTab(tab.id)}
-          className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-all ${
+          className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg transition-all min-w-[64px] ${
             currentTab === tab.id
-              ? "opacity-100 scale-105"
-              : "opacity-45 hover:opacity-70"
+              ? "opacity-100 text-white"
+              : "opacity-50 hover:opacity-70 text-[#a0a0b0]"
           }`}
         >
           <span className="text-lg">{tab.icon}</span>
-          <span className="text-xs">{tab.label}</span>
+          <span className="text-xs font-medium">{tab.label}</span>
         </button>
       ))}
     </nav>

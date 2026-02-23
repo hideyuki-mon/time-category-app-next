@@ -9,6 +9,7 @@ import { useTimerStore } from "@/lib/stores/timerStore";
 
 export function AuthInit({ children }: { children: React.ReactNode }) {
   const setUser = useAuthStore((s) => s.setUser);
+  const checkRedirectResult = useAuthStore((s) => s.checkRedirectResult);
   const user = useAuthStore((s) => s.user);
 
   useEffect(() => {
@@ -16,11 +17,18 @@ export function AuthInit({ children }: { children: React.ReactNode }) {
       setUser(null);
       return;
     }
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
-      setUser(u ?? null);
-    });
-    return () => unsubscribe();
-  }, [setUser]);
+    let unsubscribe: (() => void) | undefined;
+    const init = async () => {
+      await checkRedirectResult();
+      unsubscribe = onAuthStateChanged(auth!, (u) => {
+        setUser(u ?? null);
+      });
+    };
+    init();
+    return () => {
+      unsubscribe?.();
+    };
+  }, [setUser, checkRedirectResult]);
 
   useEffect(() => {
     if (!user) return;

@@ -37,4 +37,5 @@ body {
 /* Main content above tab bar */
 main {
   padding-bottom: max(5rem, env(safe-area-inset-bottom, 0) + 4rem);
+  background-color: #1a1a22 !important;
 }

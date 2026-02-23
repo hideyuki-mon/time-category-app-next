@@ -28,7 +28,7 @@ export function TimeCategoryApp() {
       >
         <h1 className="text-lg font-bold text-center text-white md:text-xl">Tap4</h1>
       </header>
-      <main className="bg-[#1a1a22]">
+      <main style={{ backgroundColor: "#1a1a22" }}>
         {currentTab === "measurement" && <MeasurementScreen />}
         {currentTab === "today" && <TodaySummaryScreen />}
         {currentTab === "statistics" && <StatisticsScreen />}

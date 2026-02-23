@@ -41,7 +41,10 @@ export function TodaySummaryScreen() {
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 max-w-lg mx-auto bg-[#1a1a22] text-[#e8e8f0]">
+    <div
+      className="flex flex-col min-h-[calc(100vh-140px)] w-full p-4 pb-24 max-w-lg mx-auto text-[#e8e8f0]"
+      style={{ backgroundColor: "#1a1a22" }}
+    >
       {/* 1. アプリタイトル（中央） */}
       <h2 className="text-lg font-bold text-center pt-6 pb-2 text-white">
         時間カテゴリ管理アプリ

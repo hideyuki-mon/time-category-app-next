@@ -44,6 +44,9 @@ export function SyncSection() {
   return (
     <div className="mb-6 p-4 rounded-lg bg-zinc-800/50 border border-zinc-600">
       <h3 className="text-sm font-semibold text-zinc-400 mb-2">クラウド同期</h3>
+      <p className="text-xs text-zinc-500 mb-3">
+        同一のGoogleアカウントでログインすると、スマートフォンとパソコン間でデータを同期できます。
+      </p>
       {user ? (
         <div className="space-y-2">
           <p className="text-sm text-zinc-300 truncate" title={user.email ?? undefined}>

@@ -26,7 +26,7 @@ export function TimeCategoryApp() {
         className="bg-[#24242e] border-b border-[#3a3a46] py-3 px-4"
         style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }}
       >
-        <h1 className="text-lg font-bold text-center text-white">Tap4</h1>
+        <h1 className="text-lg font-bold text-center text-white md:text-xl">Tap4</h1>
       </header>
       <main>
         {currentTab === "measurement" && <MeasurementScreen />}

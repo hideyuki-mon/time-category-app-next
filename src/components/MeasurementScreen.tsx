@@ -35,20 +35,24 @@ export function MeasurementScreen() {
   const statusCat = activeCategory !== null ? CATEGORIES[activeCategory]?.name : "";
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 max-w-lg mx-auto">
-      <div className="text-sm text-white mb-2">
-        📅 {formatDate(dt)}
+    <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 w-full max-w-lg mx-auto md:max-w-2xl md:px-8 md:py-10">
+      {/* 上段: 日付・タイマー・ステータス（左揃え） */}
+      <div className="mb-6 md:mb-8">
+        <div className="text-sm text-white mb-2 md:text-base">
+          📅 {formatDate(dt)}
+        </div>
+        <div
+          className="text-4xl font-bold mb-2 tabular-nums text-white md:text-5xl"
+          style={{ fontVariantNumeric: "tabular-nums" }}
+        >
+          {formatTime(displayTime)}
+        </div>
+        <div className="text-sm text-white/90 md:text-base">
+          {statusCat ? `${statusCat} ` : ""}{statusText}
+        </div>
       </div>
-      <div
-        className="text-4xl font-bold mb-2 tabular-nums text-white"
-        style={{ fontVariantNumeric: "tabular-nums" }}
-      >
-        {formatTime(displayTime)}
-      </div>
-      <div className="text-sm text-[#a0a0b0] mb-6">
-        {statusCat ? `${statusCat} ` : ""}{statusText}
-      </div>
-      <div className="grid grid-cols-2 gap-3 flex-1">
+      {/* 2x2 グリッド（中央配置） */}
+      <div className="grid grid-cols-2 gap-3 flex-1 md:gap-6 md:max-w-xl md:mx-auto md:place-items-stretch">
         {CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat.id;
           const total = todayTotals[cat.id] ?? 0;
@@ -60,7 +64,7 @@ export function MeasurementScreen() {
               type="button"
               onClick={() => toggleCategory(cat.id)}
               className={`
-                relative flex flex-col items-center justify-center p-4 rounded-xl min-h-[120px]
+                relative flex flex-col items-center justify-center p-4 rounded-xl min-h-[120px] md:min-h-[160px]
                 transition-all duration-200 bg-[#2a2a36]
                 ${isActive ? "scale-[1.02] shadow-lg" : ""}
                 ${isDisabled ? "opacity-50" : "opacity-100"}
@@ -74,13 +78,13 @@ export function MeasurementScreen() {
                   ● REC
                 </span>
               )}
-              <span
-                className="font-medium mb-1 text-sm"
-                style={{ color: cat.color }}
-              >
+              <span className="font-medium mb-1 text-sm text-white md:text-base">
                 {cat.name}
               </span>
-              <span className="text-2xl font-bold tabular-nums text-white/90" style={{ fontVariantNumeric: "tabular-nums" }}>
+              <span
+                className="text-2xl font-bold tabular-nums text-white md:text-3xl"
+                style={{ fontVariantNumeric: "tabular-nums" }}
+              >
                 {formatTime(total + (isActive ? elapsed : 0))}
               </span>
             </button>

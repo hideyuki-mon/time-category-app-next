@@ -41,14 +41,20 @@ export function TodaySummaryScreen() {
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 max-w-lg mx-auto">
-      {/* 1. 日付（中央） */}
-      <div className="text-sm text-zinc-400 mb-6 text-center">
-        📅 {formatDate(dt)}
+    <div className="flex flex-col min-h-[calc(100vh-140px)] bg-white text-zinc-800 max-w-lg mx-auto">
+      {/* 1. アプリタイトル（中央） */}
+      <h2 className="text-lg font-bold text-center pt-6 pb-2 text-zinc-800">
+        時間カテゴリ管理アプリ
+      </h2>
+
+      {/* 2. 日付（カレンダーアイコン + 日付、中央） */}
+      <div className="flex items-center justify-center gap-2 text-sm text-zinc-600 mb-6">
+        <span>📅</span>
+        <span>{formatDate(dt)}</span>
       </div>
 
-      {/* 2. ドーナツグラフ（中央、文字なし） */}
-      <div className="flex justify-center">
+      {/* 3. ドーナツグラフ（中央、内側に文字なし） */}
+      <div className="flex justify-center px-4">
         {chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={220}>
             <PieChart margin={{ top: 0, right: 16, bottom: 0, left: 16 }}>
@@ -75,7 +81,7 @@ export function TodaySummaryScreen() {
         )}
       </div>
 
-      {/* 3. 凡例（グラフ直下・中央）：色つき丸 + カテゴリ名 */}
+      {/* 4. 凡例（グラフ直下・中央）：色丸 + カテゴリ名 */}
       {chartData.length > 0 && (
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 mt-2 mb-2">
           {chartData.map((entry, i) => (
@@ -84,28 +90,24 @@ export function TodaySummaryScreen() {
                 className="w-3 h-3 rounded-full flex-shrink-0"
                 style={{ backgroundColor: entry.color }}
               />
-              <span className="text-sm">{entry.name}</span>
+              <span className="text-sm text-zinc-800">{entry.name}</span>
             </div>
           ))}
         </div>
       )}
 
-      {/* 4. 合計時間（中央） */}
-      <div className="text-center mb-6">
-        <span className="text-sm text-zinc-400 mr-2">合計</span>
-        <span
-          className="text-2xl font-bold tabular-nums text-white"
-          style={{ fontVariantNumeric: "tabular-nums" }}
-        >
-          {formatTime(total)}
+      {/* 5. 合計時間（中央） 「合計 0:02」形式 */}
+      <div className="text-center mb-4">
+        <span className="text-sm text-zinc-600">
+          合計 <span className="font-semibold text-zinc-800 tabular-nums">{formatTime(total)}</span>
         </span>
       </div>
 
-      {/* 5. 区切り線 */}
-      <hr className="border-zinc-600 mb-4" />
+      {/* 6. 区切り線 */}
+      <hr className="border-zinc-200 mx-4 mb-4" />
 
-      {/* 6. カテゴリ内訳：左に色+名前、右に時間(割合%) */}
-      <div className="space-y-3 mb-6">
+      {/* 7. カテゴリ内訳（左：色+名前、右：時間(割合%)） */}
+      <div className="space-y-3 px-4 mb-6">
         {CATEGORIES.map((cat) => {
           const v = todayTotals[cat.id] ?? 0;
           const pct = total > 0 ? Math.round((v / total) * 100) : 0;
@@ -119,12 +121,9 @@ export function TodaySummaryScreen() {
                   className="w-3 h-3 rounded-full flex-shrink-0"
                   style={{ backgroundColor: cat.color }}
                 />
-                <span>{cat.name}</span>
+                <span className="text-zinc-800">{cat.name}</span>
               </div>
-              <span
-                className="tabular-nums text-zinc-300"
-                style={{ fontVariantNumeric: "tabular-nums" }}
-              >
+              <span className="tabular-nums text-zinc-600" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {formatTime(v)} ({pct}%)
               </span>
             </div>
@@ -132,9 +131,9 @@ export function TodaySummaryScreen() {
         })}
       </div>
 
-      {/* 7. 今日のひとこと（吹き出しアイコン + ラベル） */}
-      <div>
-        <label className="flex items-center gap-2 text-sm text-zinc-400 mb-2">
+      {/* 8. 今日のひとこと（吹き出しアイコン + ラベル、左揃え） */}
+      <div className="px-4 pb-24">
+        <label className="flex items-center gap-2 text-sm text-zinc-800 mb-2">
           <span>💬</span>
           今日のひとこと
         </label>
@@ -143,7 +142,7 @@ export function TodaySummaryScreen() {
           onChange={(e) => setMemo(e.target.value)}
           onBlur={handleMemoBlur}
           placeholder="振り返りメモを入力..."
-          className="w-full p-3 rounded-lg border border-zinc-600 bg-zinc-800/50 text-zinc-100 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-zinc-500"
+          className="w-full p-3 rounded-lg border border-zinc-300 bg-zinc-50 text-zinc-800 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-zinc-400"
         />
       </div>
     </div>

@@ -1,0 +1,13 @@
+{
+  "name": "Tap4",
+  "short_name": "Tap4",
+  "description": "1日の時間を4カテゴリで記録・可視化",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a22",
+  "theme_color": "#27AE60",
+  "icons": [
+    { "src": "/tap4-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/tap4-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

@@ -1,6 +1,5 @@
 "use client";
 
-import { CATEGORIES } from "@/lib/constants/categories";
 import { SyncSection } from "./SyncSection";
 
 export function SettingsScreen() {
@@ -17,20 +16,6 @@ export function SettingsScreen() {
         </p>
       </div>
       <SyncSection />
-      <div className="mb-6">
-        <h3 className="text-sm font-semibold text-zinc-400 mb-2">カテゴリ</h3>
-        <div className="space-y-2">
-          {CATEGORIES.map((cat) => (
-            <div key={cat.id} className="flex items-center gap-2">
-              <span
-                className="w-4 h-4 rounded"
-                style={{ backgroundColor: cat.color }}
-              />
-              <span>{cat.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

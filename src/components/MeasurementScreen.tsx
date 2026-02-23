@@ -66,9 +66,7 @@ export function MeasurementScreen() {
                 ${isDisabled ? "opacity-50" : "opacity-100"}
               `}
               style={{
-                borderWidth: 2,
-                borderStyle: "solid",
-                borderColor: cat.color,
+                boxShadow: `0 0 0 2px ${cat.color}`,
               }}
             >
               {isActive && (

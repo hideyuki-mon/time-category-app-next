@@ -6,10 +6,13 @@ import { syncRecords } from "@/lib/sync";
 import { useTimerStore } from "@/lib/stores/timerStore";
 
 export function SyncSection() {
-  const { user, loading, configured, signInWithGoogle, signOut } = useAuthStore();
+  const { user, loading, configured, error, clearError, signInWithGoogle, signUpWithEmail, signInWithEmail, signOut } =
+    useAuthStore();
   const loadTodayTotals = useTimerStore((s) => s.loadTodayTotals);
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSync = async () => {
     setSyncing(true);
@@ -45,7 +48,7 @@ export function SyncSection() {
     <div className="mb-6 p-4 rounded-lg bg-zinc-800/50 border border-zinc-600">
       <h3 className="text-sm font-semibold text-zinc-400 mb-2">クラウド同期</h3>
       <p className="text-xs text-zinc-500 mb-3">
-        同一のGoogleアカウントでログインすると、スマートフォンとパソコン間でデータを同期できます。
+        メールアドレスでアカウント作成、または同一アカウントでログインすると、スマートフォンとパソコン間でデータを同期できます。
       </p>
       {user ? (
         <div className="space-y-2">
@@ -75,21 +78,67 @@ export function SyncSection() {
           )}
         </div>
       ) : (
-        <button
-          type="button"
-          onClick={() => signInWithGoogle()}
-          disabled={loading}
-          className="w-full py-3 rounded-lg border border-zinc-500 hover:bg-zinc-700 flex items-center justify-center gap-2"
-        >
-          {loading ? (
-            "読み込み中..."
-          ) : (
-            <>
-              <span>🔐</span>
-              Googleでログイン
-            </>
-          )}
-        </button>
+        <div className="space-y-3">
+          <div>
+            <input
+              type="email"
+              placeholder="メールアドレス"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                clearError();
+              }}
+              className="w-full px-3 py-2 rounded-lg border border-zinc-600 bg-zinc-800/50 text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+              autoComplete="email"
+            />
+          </div>
+          <div>
+            <input
+              type="password"
+              placeholder="パスワード（6文字以上）"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                clearError();
+              }}
+              className="w-full px-3 py-2 rounded-lg border border-zinc-600 bg-zinc-800/50 text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500"
+              autoComplete="current-password"
+            />
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => signUpWithEmail(email, password)}
+              disabled={loading || !email.trim() || password.length < 6}
+              className="flex-1 py-2 rounded-lg bg-[#27AE60] text-white text-sm font-medium disabled:opacity-50 hover:bg-[#229954]"
+            >
+              {loading ? "処理中..." : "アカウント作成"}
+            </button>
+            <button
+              type="button"
+              onClick={() => signInWithEmail(email, password)}
+              disabled={loading || !email.trim() || !password}
+              className="flex-1 py-2 rounded-lg border border-zinc-500 text-zinc-300 text-sm hover:bg-zinc-700 disabled:opacity-50"
+            >
+              ログイン
+            </button>
+          </div>
+          {error && <p className="text-xs text-red-400">{error}</p>}
+          <div className="flex items-center gap-2 pt-1">
+            <span className="flex-1 border-t border-zinc-600" />
+            <span className="text-xs text-zinc-500">または</span>
+            <span className="flex-1 border-t border-zinc-600" />
+          </div>
+          <button
+            type="button"
+            onClick={() => signInWithGoogle()}
+            disabled={loading}
+            className="w-full py-2 rounded-lg border border-zinc-500 hover:bg-zinc-700 flex items-center justify-center gap-2 text-sm"
+          >
+            <span>🔐</span>
+            Googleでログイン
+          </button>
+        </div>
       )}
     </div>
   );

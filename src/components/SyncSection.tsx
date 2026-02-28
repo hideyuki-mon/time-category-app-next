@@ -52,6 +52,12 @@ export function SyncSection() {
       </p>
       {user ? (
         <div className="space-y-2">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#27AE60]/20 text-[#27AE60] text-xs font-medium">
+              <span className="w-2 h-2 rounded-full bg-[#27AE60] animate-pulse" />
+              ログイン中
+            </span>
+          </div>
           <p className="text-sm text-zinc-300 truncate" title={user.email ?? undefined}>
             {user.email}
           </p>

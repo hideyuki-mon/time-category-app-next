@@ -46,18 +46,24 @@ export function SyncSection() {
 
   return (
     <div className="mb-6 p-4 rounded-lg bg-zinc-800/50 border border-zinc-600">
-      <h3 className="text-sm font-semibold text-zinc-400 mb-2">クラウド同期</h3>
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-sm font-semibold text-zinc-400">
+          クラウド同期
+          {user ? (
+            <span className="ml-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#27AE60]/30 text-[#27AE60] text-xs font-medium">
+              <span className="w-2 h-2 rounded-full bg-[#27AE60] animate-pulse" aria-hidden />
+              ログイン中
+            </span>
+          ) : (
+            <span className="ml-2 text-xs text-zinc-500 font-normal">（未ログイン）</span>
+          )}
+        </h3>
+      </div>
       <p className="text-xs text-zinc-500 mb-3">
         メールアドレスでアカウント作成、または同一アカウントでログインすると、スマートフォンとパソコン間でデータを同期できます。
       </p>
       {user ? (
         <div className="space-y-2">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#27AE60]/20 text-[#27AE60] text-xs font-medium">
-              <span className="w-2 h-2 rounded-full bg-[#27AE60] animate-pulse" />
-              ログイン中
-            </span>
-          </div>
           <p className="text-sm text-zinc-300 truncate" title={user.email ?? undefined}>
             {user.email}
           </p>

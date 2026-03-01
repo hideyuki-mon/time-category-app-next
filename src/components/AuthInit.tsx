@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, isConfigured } from "@/lib/firebase";
 import { useAuthStore } from "@/lib/authStore";
-import { pullRecordsFromCloud } from "@/lib/sync";
+import { syncRecords } from "@/lib/sync";
 import { useTimerStore } from "@/lib/stores/timerStore";
 
 export function AuthInit({ children }: { children: React.ReactNode }) {
@@ -32,7 +32,7 @@ export function AuthInit({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!user) return;
-    pullRecordsFromCloud().then(() => {
+    syncRecords().then(() => {
       useTimerStore.getState().loadTodayTotals();
     });
   }, [user]);

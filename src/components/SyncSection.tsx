@@ -62,10 +62,21 @@ export function SyncSection() {
       <p className="text-xs text-zinc-500 mb-3">
         メールアドレスでアカウント作成、または同一アカウントでログインすると、スマートフォンとパソコン間でデータを同期できます。
       </p>
+      <p className="text-xs text-zinc-500 mb-3">
+        <strong>データの引き継ぎ方：</strong> ①パソコンでログイン→「今すぐ同期」 ②携帯で同じアカウントでログイン→「今すぐ同期」の順で実行してください。
+      </p>
+      {typeof window !== "undefined" && (window.innerWidth < 768 || "ontouchstart" in window) && !user && (
+        <p className="text-xs text-amber-400/90 mb-3">
+          ※携帯電話ではメールアドレスでのログインを推奨します。Googleログインがうまくいかない場合があります。
+        </p>
+      )}
       {user ? (
         <div className="space-y-2">
           <p className="text-sm text-zinc-300 truncate" title={user.email ?? undefined}>
             {user.email}
+          </p>
+          <p className="text-xs text-zinc-400">
+            過去のデータを引き継ぐには、下の「今すぐ同期」をタップしてください。パソコンのデータを取り込むには、先にパソコン側で「今すぐ同期」を実行しておいてください。
           </p>
           <div className="flex gap-2">
             <button

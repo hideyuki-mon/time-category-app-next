@@ -2,7 +2,7 @@
   "name": "Tap4",
   "short_name": "Tap4",
   "description": "1日の時間を4カテゴリで記録・可視化",
-  "start_url": "/",
+  "start_url": "/?v=2",
   "display": "standalone",
   "background_color": "#1a1a22",
   "theme_color": "#27AE60",

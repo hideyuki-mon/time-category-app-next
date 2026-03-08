@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useUIStore } from "@/lib/stores/uiStore";
 import { useTimerStore } from "@/lib/stores/timerStore";
-import { AuthInit } from "./AuthInit";
 import { TabBar } from "./TabBar";
 import { MeasurementScreen } from "./MeasurementScreen";
 import { TodaySummaryScreen } from "./TodaySummaryScreen";
@@ -20,7 +19,6 @@ export function TimeCategoryApp() {
   }, [restore, loadTodayTotals]);
 
   return (
-    <AuthInit>
     <div className="min-h-screen bg-[#1a1a22] text-[#e8e8f0]">
       <header
         className="bg-[#24242e] border-b border-[#3a3a46] py-3 px-4"
@@ -36,6 +34,5 @@ export function TimeCategoryApp() {
       </main>
       <TabBar />
     </div>
-    </AuthInit>
   );
 }

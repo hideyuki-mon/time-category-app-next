@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { SyncSection } from "./SyncSection";
 
 export function SettingsScreen() {
@@ -14,6 +15,26 @@ export function SettingsScreen() {
         <p className="text-xs text-zinc-500 mt-2 text-center max-w-xs">
           1日の時間を4カテゴリで記録・可視化するPWAアプリ
         </p>
+        <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1">
+          <Link
+            href="/privacy"
+            className="text-sm text-zinc-400 hover:text-[#27AE60] underline"
+          >
+            プライバシーポリシー
+          </Link>
+          <Link
+            href="/terms"
+            className="text-sm text-zinc-400 hover:text-[#27AE60] underline"
+          >
+            利用規約
+          </Link>
+          <Link
+            href="/contact"
+            className="text-sm text-zinc-400 hover:text-[#27AE60] underline"
+          >
+            お問い合わせ
+          </Link>
+        </div>
       </div>
       <SyncSection />
     </div>

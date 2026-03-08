@@ -39,3 +39,45 @@ main {
   padding-bottom: max(5rem, env(safe-area-inset-bottom, 0) + 4rem);
   background-color: #1a1a22 !important;
 }
+
+/* ランディングページ フェードイン */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  opacity: 0;
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+
+@media (min-width: 768px) {
+  .md\:animation-delay-100 {
+    animation-delay: 0.1s;
+  }
+  .md\:animation-delay-200 {
+    animation-delay: 0.2s;
+  }
+  .md\:animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+  .md\:animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+}

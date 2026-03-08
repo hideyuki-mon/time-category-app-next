@@ -103,6 +103,25 @@ export function StatisticsScreen() {
         }
       }
 
+      // 1日24hを超えないよう正規化（重複記録などで超過した場合）
+      const maxSeconds =
+        period === "day"
+          ? 24 * 3600
+          : period === "week"
+            ? 7 * 24 * 3600
+            : 31 * 24 * 3600;
+      for (const item of items) {
+        const total = [0, 1, 2, 3].reduce((s, c) => s + ((item[c] as number) || 0), 0);
+        if (total > maxSeconds && total > 0) {
+          const scale = maxSeconds / total;
+          for (let c = 0; c < 4; c++) {
+            (item as Record<number, number>)[c] = Math.round(
+              ((item[c] as number) || 0) * scale
+            );
+          }
+        }
+      }
+
       const avgs: Record<CategoryId, number> = { 0: 0, 1: 0, 2: 0, 3: 0 };
       const n = items.length;
       for (const item of items) {
@@ -120,6 +139,13 @@ export function StatisticsScreen() {
   }, [period]);
 
   const totalAvg = [0, 1, 2, 3].reduce((s, c) => s + averages[c as CategoryId], 0);
+
+  const yAxisDomain =
+    period === "day"
+      ? [0, 24 * 3600]
+      : period === "week"
+        ? [0, 7 * 24 * 3600]
+        : [0, 31 * 24 * 3600];
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 max-w-lg mx-auto">
@@ -147,7 +173,7 @@ export function StatisticsScreen() {
             <YAxis
               stroke="#8888a0"
               fontSize={12}
-              domain={[0, "auto"]}
+              domain={yAxisDomain}
               tickFormatter={(v) => {
                 if (typeof v !== "number" || v < 0) return "0h";
                 const h = toHours(v);

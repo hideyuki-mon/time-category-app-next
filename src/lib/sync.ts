@@ -14,6 +14,62 @@ function recordDocId(r: { date: string; startTime: number; category: number }) {
   return `${r.date}_${r.startTime}_${r.category}`;
 }
 
+/** 2つのレコードの時間帯が重複しているか */
+function overlaps(
+  a: { startTime: number; endTime: number },
+  b: { startTime: number; endTime: number }
+): boolean {
+  return a.startTime < b.endTime && b.startTime < a.endTime;
+}
+
+/** 同一日の重複・オーバーラップを解消。新しい方の開始で古い方を自動停止し、古いデータは打ち切って保存 */
+async function resolveOverlapsInLocalDB(): Promise<void> {
+  const all = await localDb.records.toArray();
+  const valid = all.filter(
+    (r): r is RecordRow & { id: number } =>
+      isValidRecord(r) && typeof (r as RecordRow).id === "number"
+  );
+
+  const byDate = new Map<string, (RecordRow & { id: number })[]>();
+  for (const r of valid) {
+    const list = byDate.get(r.date) ?? [];
+    list.push(r);
+    byDate.set(r.date, list);
+  }
+
+  for (const [, list] of byDate) {
+    list.sort((a, b) => a.startTime - b.startTime);
+    const kept: (RecordRow & { id: number })[] = [];
+
+    for (const r of list) {
+      // 新しいレコードが起動した時点で、重複する古いレコードを自動停止（打ち切り）
+      for (let i = kept.length - 1; i >= 0; i--) {
+        const k = kept[i];
+        if (!overlaps(k, r) || k.startTime >= r.startTime) continue;
+        const newEndTime = r.startTime;
+        const newDuration = Math.floor((newEndTime - k.startTime) / 1000);
+        if (newDuration <= 0) {
+          try {
+            await localDb.records.delete(k.id);
+          } catch {
+            /* ignore */
+          }
+          kept.splice(i, 1);
+        } else {
+          k.endTime = newEndTime;
+          k.duration = newDuration;
+          try {
+            await localDb.records.put(k);
+          } catch {
+            /* ignore */
+          }
+        }
+      }
+      kept.push(r);
+    }
+  }
+}
+
 function isValidRecord(r: RecordRow): r is RecordRow & { date: string; startTime: number; endTime: number; duration: number } {
   return (
     r != null &&
@@ -164,13 +220,22 @@ export async function syncRecords(): Promise<{
   pulled?: number;
   error?: string;
 }> {
+  // 1. ローカルの重複を解消（古い方を新しい開始で打ち切り）してからプッシュ
+  await resolveOverlapsInLocalDB();
+
   const pushResult = await pushRecordsToCloud();
   if (!pushResult.ok) return pushResult;
   const pullResult = await pullRecordsFromCloud();
   if (!pullResult.ok) return pullResult;
+
+  // 2. プル後に重複が発生し得るので再度解消し、打ち切った内容をクラウドへ反映
+  await resolveOverlapsInLocalDB();
+  const pushAfterPull = await pushRecordsToCloud();
+  if (!pushAfterPull.ok) return pushAfterPull;
+
   return {
     ok: true,
-    pushed: pushResult.count,
+    pushed: (pushResult.count ?? 0) + (pushAfterPull.count ?? 0),
     pulled: pullResult.count,
   };
 }

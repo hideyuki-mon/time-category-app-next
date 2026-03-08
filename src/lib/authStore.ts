@@ -7,6 +7,8 @@ import {
   getRedirectResult,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+  fetchSignInMethodsForEmail,
   signOut as firebaseSignOut,
   GoogleAuthProvider,
   setPersistence,
@@ -24,12 +26,14 @@ interface AuthState {
   user: User | null;
   loading: boolean;
   error: string | null;
+  successMessage: string | null;
   configured: boolean;
   setUser: (u: User | null) => void;
   clearError: () => void;
   signInWithGoogle: () => Promise<void>;
   signUpWithEmail: (email: string, password: string) => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<void>;
+  sendPasswordReset: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
   checkRedirectResult: () => Promise<void>;
 }
@@ -38,9 +42,10 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   loading: true,
   error: null,
+  successMessage: null,
   configured: !!isConfigured,
-  setUser: (u) => set({ user: u, loading: false, error: null }),
-  clearError: () => set({ error: null }),
+  setUser: (u) => set({ user: u, loading: false, error: null, successMessage: null }),
+  clearError: () => set({ error: null, successMessage: null }),
 
 
   checkRedirectResult: async () => {
@@ -109,6 +114,51 @@ export const useAuthStore = create<AuthState>((set) => ({
         : msg.includes("invalid-email")
           ? "有効なメールアドレスを入力してください"
           : msg;
+      set({ loading: false, error: jp });
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  sendPasswordReset: async (email: string) => {
+    if (!auth || !isConfigured) return;
+    set({ loading: true, error: null, successMessage: null });
+    const trimmed = email.trim();
+    try {
+      // メール/パスワードで登録されているか確認（未登録・Google専用の場合は送信しない）
+      const methods = await fetchSignInMethodsForEmail(auth, trimmed);
+      if (methods.length === 0) {
+        set({ loading: false, error: "このメールアドレスは登録されていません" });
+        return;
+      }
+      if (!methods.includes("password")) {
+        set({
+          loading: false,
+          error: "このアカウントはGoogleで登録されています。別のメールアドレスでアカウント作成をご利用ください。",
+        });
+        return;
+      }
+      // リセット後のリダイレクト先（Firebase Console の「認証されたドメイン」に追加必須）
+      const continueUrl =
+        typeof window !== "undefined" ? `${window.location.origin}/?reset=done` : undefined;
+      await sendPasswordResetEmail(auth, trimmed, continueUrl ? { url: continueUrl } : undefined);
+      set({
+        loading: false,
+        error: null,
+        successMessage:
+          "パスワードリセット用のメールを送信しました。メールをご確認ください。（届かない場合は迷惑メールフォルダも確認してください）",
+      });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      const jp = msg.includes("user-not-found")
+        ? "このメールアドレスは登録されていません"
+        : msg.includes("invalid-email")
+          ? "有効なメールアドレスを入力してください"
+          : msg.includes("unauthorized-domain")
+            ? "このドメインは認証されていません。Firebase Console の「認証されたドメイン」に追加してください。"
+            : msg.includes("too-many-requests")
+              ? "リセットメールの送信回数が多すぎます。しばらく待ってから再度お試しください。"
+              : msg;
       set({ loading: false, error: jp });
     } finally {
       set({ loading: false });

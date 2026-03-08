@@ -6,14 +6,13 @@ import { syncRecords } from "@/lib/sync";
 import { useTimerStore } from "@/lib/stores/timerStore";
 
 export function SyncSection() {
-  const { user, loading, configured, error, clearError, signInWithGoogle, signUpWithEmail, signInWithEmail, signOut } =
+  const { user, loading, configured, error, successMessage, clearError, signUpWithEmail, signInWithEmail, sendPasswordReset, signOut } =
     useAuthStore();
   const loadTodayTotals = useTimerStore((s) => s.loadTodayTotals);
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const handleSync = async () => {
     setSyncing(true);
     setSyncMessage(null);
@@ -65,11 +64,6 @@ export function SyncSection() {
       <p className="text-xs text-zinc-500 mb-3">
         <strong>データの引き継ぎ方：</strong> ①パソコンでログイン→「今すぐ同期」 ②携帯で同じアカウントでログイン→「今すぐ同期」の順で実行してください。
       </p>
-      {typeof window !== "undefined" && (window.innerWidth < 768 || "ontouchstart" in window) && !user && (
-        <p className="text-xs text-amber-400/90 mb-3">
-          ※携帯電話ではメールアドレスでのログインを推奨します。Googleログインがうまくいかない場合があります。
-        </p>
-      )}
       {user ? (
         <div className="space-y-2">
           <p className="text-sm text-zinc-300 truncate" title={user.email ?? undefined}>
@@ -127,6 +121,14 @@ export function SyncSection() {
               className="w-full px-3 py-2 rounded-lg border border-zinc-600 bg-zinc-800/50 text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500"
               autoComplete="current-password"
             />
+            <button
+              type="button"
+              onClick={() => sendPasswordReset(email.trim())}
+              disabled={loading || !email.trim()}
+              className="mt-1 text-xs text-zinc-400 hover:text-zinc-300 underline disabled:opacity-50"
+            >
+              パスワードを忘れた方
+            </button>
           </div>
           <div className="flex gap-2">
             <button
@@ -147,20 +149,7 @@ export function SyncSection() {
             </button>
           </div>
           {error && <p className="text-xs text-red-400">{error}</p>}
-          <div className="flex items-center gap-2 pt-1">
-            <span className="flex-1 border-t border-zinc-600" />
-            <span className="text-xs text-zinc-500">または</span>
-            <span className="flex-1 border-t border-zinc-600" />
-          </div>
-          <button
-            type="button"
-            onClick={() => signInWithGoogle()}
-            disabled={loading}
-            className="w-full py-2 rounded-lg border border-zinc-500 hover:bg-zinc-700 flex items-center justify-center gap-2 text-sm"
-          >
-            <span>🔐</span>
-            Googleでログイン
-          </button>
+          {successMessage && <p className="text-xs text-green-400">{successMessage}</p>}
         </div>
       )}
     </div>

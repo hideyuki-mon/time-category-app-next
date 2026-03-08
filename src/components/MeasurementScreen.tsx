@@ -62,12 +62,13 @@ export function MeasurementScreen() {
             <button
               key={cat.id}
               type="button"
+              disabled={isDisabled}
               onClick={() => toggleCategory(cat.id)}
               className={`
                 relative flex flex-col items-center justify-center p-4 rounded-xl min-h-[120px] md:min-h-[160px]
                 transition-all duration-200 bg-[#2a2a36]
                 ${isActive ? "scale-[1.02] shadow-lg" : ""}
-                ${isDisabled ? "opacity-50" : "opacity-100"}
+                ${isDisabled ? "opacity-50 cursor-not-allowed pointer-events-none" : "opacity-100"}
               `}
               style={{
                 boxShadow: `0 0 0 2px ${cat.color}`,

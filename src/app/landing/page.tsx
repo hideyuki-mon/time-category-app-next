@@ -37,16 +37,22 @@ export default function LandingPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
+            href="/app"
+            className="inline-flex justify-center py-3 px-6 rounded-lg border-2 border-[#27AE60] text-[#27AE60] font-medium hover:bg-[#27AE60]/10 transition-colors"
+          >
+            お試しで使ってみる
+          </Link>
+          <Link
             href="/signup"
             className="inline-flex justify-center py-3 px-6 rounded-lg bg-[#27AE60] text-white font-medium hover:bg-[#229954] transition-colors"
           >
-            無料で始める
+            アカウント登録（データ保存）
           </Link>
           <Link
             href="/login"
             className="inline-flex justify-center py-3 px-6 rounded-lg border border-zinc-500 text-zinc-300 font-medium hover:bg-zinc-800 transition-colors"
           >
-            ログインはこちら
+            ログイン
           </Link>
         </div>
       </section>
@@ -116,7 +122,7 @@ export default function LandingPage() {
               1
             </div>
             <h3 className="font-bold text-white mb-2">STEP 1</h3>
-            <p className="text-sm text-zinc-400">アカウント登録（無料）</p>
+            <p className="text-sm text-zinc-400">お試しで使ってみる</p>
           </div>
           <div className="text-center animate-fade-in md:animation-delay-100">
             <div className="w-12 h-12 rounded-full bg-[#27AE60]/30 text-[#27AE60] font-bold flex items-center justify-center mx-auto mb-3 text-lg">
@@ -130,20 +136,29 @@ export default function LandingPage() {
               3
             </div>
             <h3 className="font-bold text-white mb-2">STEP 3</h3>
-            <p className="text-sm text-zinc-400">統計ページで振り返る</p>
+            <p className="text-sm text-zinc-400">データ保存にはアカウント登録</p>
           </div>
         </div>
       </section>
 
       {/* セクション④ CTA */}
       <section className="py-12 px-4 md:py-16 text-center animate-fade-in">
-        <p className="text-lg text-zinc-300 mb-6">まずは無料で試してみましょう</p>
-        <Link
-          href="/signup"
-          className="inline-flex justify-center py-3 px-8 rounded-lg bg-[#27AE60] text-white font-medium hover:bg-[#229954] transition-colors"
-        >
-          無料で始める
-        </Link>
+        <p className="text-lg text-zinc-300 mb-4">まずはお試しで使い心地を体験</p>
+        <p className="text-sm text-zinc-500 mb-6">データを永続保存するにはアカウント登録が必要です</p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link
+            href="/app"
+            className="inline-flex justify-center py-3 px-8 rounded-lg border-2 border-[#27AE60] text-[#27AE60] font-medium hover:bg-[#27AE60]/10 transition-colors"
+          >
+            お試しで使ってみる
+          </Link>
+          <Link
+            href="/signup"
+            className="inline-flex justify-center py-3 px-8 rounded-lg bg-[#27AE60] text-white font-medium hover:bg-[#229954] transition-colors"
+          >
+            アカウント登録して保存する
+          </Link>
+        </div>
       </section>
 
       {/* フッター */}

@@ -1,5 +1,5 @@
-import { TimeCategoryApp } from "@/components/TimeCategoryApp";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return <TimeCategoryApp />;
+  redirect("/landing");
 }

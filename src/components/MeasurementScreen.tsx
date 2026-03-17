@@ -3,10 +3,12 @@
 import { useEffect } from "react";
 import { CATEGORIES, type CategoryId } from "@/lib/constants/categories";
 import { useTimerStore } from "@/lib/stores/timerStore";
+import { useTranslation } from "@/lib/i18n/useTranslation";
 import { formatTime, formatDate } from "@/lib/utils/time";
 import { today } from "@/lib/utils/time";
 
 export function MeasurementScreen() {
+  const { t, categoryName } = useTranslation();
   const {
     activeCategory,
     elapsed,
@@ -31,8 +33,8 @@ export function MeasurementScreen() {
 
   const totalToday = [0, 1, 2, 3].reduce((s, c) => s + (todayTotals[c as CategoryId] ?? 0), 0);
   const displayTime = activeCategory !== null ? elapsed : totalToday;
-  const statusText = activeCategory !== null ? "計測中..." : "待機中";
-  const statusCat = activeCategory !== null ? CATEGORIES[activeCategory]?.name : "";
+  const statusText = activeCategory !== null ? t("measuring") : t("waiting");
+  const statusCat = activeCategory !== null ? categoryName(activeCategory) : "";
 
   return (
     <div className="flex flex-col min-h-[calc(100vh-140px)] p-4 pb-24 w-full max-w-lg mx-auto md:max-w-2xl md:px-8 md:py-10">
@@ -80,7 +82,7 @@ export function MeasurementScreen() {
                 </span>
               )}
               <span className="font-medium mb-1 text-sm text-white md:text-base">
-                {cat.name}
+                {categoryName(cat.id)}
               </span>
               <span
                 className="text-2xl font-bold tabular-nums text-white md:text-3xl"

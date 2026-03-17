@@ -4,9 +4,13 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/lib/authStore";
+import { useTranslation } from "@/lib/i18n/useTranslation";
+import { useLocaleStore } from "@/lib/stores/localeStore";
 
 export default function LandingPage() {
   const router = useRouter();
+  const { t } = useTranslation();
+  const { locale, setLocale } = useLocaleStore();
   const user = useAuthStore((s) => s.user);
   const loading = useAuthStore((s) => s.loading);
 
@@ -16,85 +20,74 @@ export default function LandingPage() {
     }
   }, [user, loading, router]);
 
-  // ログイン中はリダイレクト（読み込み中はランディングを表示して待つ）
   if (user) {
     return (
       <div className="min-h-screen bg-[#1a1a22] flex items-center justify-center">
-        <div className="animate-pulse text-zinc-500">リダイレクト中...</div>
+        <div className="animate-pulse text-zinc-500">{t("redirecting")}</div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-[#1a1a22] text-[#e8e8f0]">
-      {/* セクション① ヒーロー */}
       <section className="pt-16 pb-12 px-4 text-center md:pt-24 md:pb-16 animate-fade-in">
         <h1 className="text-2xl font-bold text-white mb-4 md:text-3xl">
-          あなたの時間、ちゃんと使えていますか？
+          {t("heroTitle")}
         </h1>
         <p className="text-zinc-400 mb-8 max-w-xl mx-auto md:text-lg">
-          Tap4は、1日の時間の使い方を4つに分けて記録・可視化するアプリです。
+          {t("heroSubtitle")}
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/app"
             className="inline-flex justify-center py-3 px-6 rounded-lg border-2 border-[#27AE60] text-[#27AE60] font-medium hover:bg-[#27AE60]/10 transition-colors"
           >
-            お試しで使ってみる
+            {t("tryIt")}
           </Link>
           <Link
             href="/signup"
             className="inline-flex justify-center py-3 px-6 rounded-lg bg-[#27AE60] text-white font-medium hover:bg-[#229954] transition-colors"
           >
-            アカウント登録（データ保存）
+            {t("signupWithSave")}
           </Link>
           <Link
             href="/login"
             className="inline-flex justify-center py-3 px-6 rounded-lg border border-zinc-500 text-zinc-300 font-medium hover:bg-zinc-800 transition-colors"
           >
-            ログイン
+            {t("loginLink")}
           </Link>
         </div>
       </section>
 
-      {/* セクション② 3つの特徴 */}
       <section className="py-12 px-4 md:py-16">
         <h2 className="text-xl font-bold text-white text-center mb-8 md:text-2xl">
-          3つの特徴
+          {t("featuresTitle")}
         </h2>
         <div className="grid gap-6 max-w-4xl mx-auto md:grid-cols-3">
           <div className="p-6 rounded-xl bg-[#24242e] border border-[#3a3a46] animate-fade-in md:animation-delay-200">
             <div className="text-3xl mb-3">⏱️</div>
-            <h3 className="font-bold text-white mb-2">ワンタップで記録</h3>
-            <p className="text-sm text-zinc-400">
-              ボタンを押すだけで時間の計測スタート。面倒な入力は不要です。
-            </p>
+            <h3 className="font-bold text-white mb-2">{t("feature1Title")}</h3>
+            <p className="text-sm text-zinc-400">{t("feature1Desc")}</p>
           </div>
           <div className="p-6 rounded-xl bg-[#24242e] border border-[#3a3a46] animate-fade-in md:animation-delay-300">
             <div className="text-3xl mb-3">🗂️</div>
-            <h3 className="font-bold text-white mb-2">4つのカテゴリで整理</h3>
-            <p className="text-sm text-zinc-400">
-              ただの消費・生産につながる消費・生産・思考停止ルーティーンの4カテゴリで、時間の質を分類します。
-            </p>
+            <h3 className="font-bold text-white mb-2">{t("feature2Title")}</h3>
+            <p className="text-sm text-zinc-400">{t("feature2Desc")}</p>
           </div>
           <div className="p-6 rounded-xl bg-[#24242e] border border-[#3a3a46] animate-fade-in md:animation-delay-400">
             <div className="text-3xl mb-3">📊</div>
-            <h3 className="font-bold text-white mb-2">統計・グラフで振り返る</h3>
-            <p className="text-sm text-zinc-400">
-              日・週・月単位で時間の使い方をグラフで確認。自分のパターンに気づくことができます。
-            </p>
+            <h3 className="font-bold text-white mb-2">{t("feature3Title")}</h3>
+            <p className="text-sm text-zinc-400">{t("feature3Desc")}</p>
           </div>
         </div>
       </section>
 
-      {/* セクション②-2 参考動画 */}
       <section className="py-12 px-4 md:py-16 bg-[#24242e]/50">
         <h2 className="text-xl font-bold text-white text-center mb-4 md:text-2xl">
-          🎬 Tap4が生まれたきっかけ
+          {t("videoTitle")}
         </h2>
         <p className="text-zinc-400 text-sm md:text-base text-center max-w-2xl mx-auto mb-6">
-          Tap4は、こちらのYouTube動画からインスピレーションを受けて開発しました。
-          時間の使い方や自己管理に興味がある方は、ぜひご覧ください。
+          {t("videoDesc")}
         </p>
         <div className="max-w-3xl mx-auto">
           <div className="rounded-xl overflow-hidden border border-[#3a3a46] bg-[#1a1a22] p-2 md:p-4">
@@ -111,10 +104,9 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* セクション③ 使い方 */}
       <section className="py-12 px-4 md:py-16 bg-[#24242e]/50">
         <h2 className="text-xl font-bold text-white text-center mb-8 md:text-2xl">
-          使い方
+          {t("howToTitle")}
         </h2>
         <div className="grid gap-8 max-w-3xl mx-auto md:grid-cols-3">
           <div className="text-center animate-fade-in">
@@ -122,57 +114,72 @@ export default function LandingPage() {
               1
             </div>
             <h3 className="font-bold text-white mb-2">STEP 1</h3>
-            <p className="text-sm text-zinc-400">お試しで使ってみる</p>
+            <p className="text-sm text-zinc-400">{t("step1")}</p>
           </div>
           <div className="text-center animate-fade-in md:animation-delay-100">
             <div className="w-12 h-12 rounded-full bg-[#27AE60]/30 text-[#27AE60] font-bold flex items-center justify-center mx-auto mb-3 text-lg">
               2
             </div>
             <h3 className="font-bold text-white mb-2">STEP 2</h3>
-            <p className="text-sm text-zinc-400">カテゴリを選んでタップするだけ</p>
+            <p className="text-sm text-zinc-400">{t("step2")}</p>
           </div>
           <div className="text-center animate-fade-in md:animation-delay-200">
             <div className="w-12 h-12 rounded-full bg-[#27AE60]/30 text-[#27AE60] font-bold flex items-center justify-center mx-auto mb-3 text-lg">
               3
             </div>
             <h3 className="font-bold text-white mb-2">STEP 3</h3>
-            <p className="text-sm text-zinc-400">データ保存にはアカウント登録</p>
+            <p className="text-sm text-zinc-400">{t("step3")}</p>
           </div>
         </div>
       </section>
 
-      {/* セクション④ CTA */}
       <section className="py-12 px-4 md:py-16 text-center animate-fade-in">
-        <p className="text-lg text-zinc-300 mb-4">まずはお試しで使い心地を体験</p>
-        <p className="text-sm text-zinc-500 mb-6">データを永続保存するにはアカウント登録が必要です</p>
+        <p className="text-lg text-zinc-300 mb-4">{t("ctaTry")}</p>
+        <p className="text-sm text-zinc-500 mb-6">{t("ctaNote")}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/app"
             className="inline-flex justify-center py-3 px-8 rounded-lg border-2 border-[#27AE60] text-[#27AE60] font-medium hover:bg-[#27AE60]/10 transition-colors"
           >
-            お試しで使ってみる
+            {t("tryIt")}
           </Link>
           <Link
             href="/signup"
             className="inline-flex justify-center py-3 px-8 rounded-lg bg-[#27AE60] text-white font-medium hover:bg-[#229954] transition-colors"
           >
-            アカウント登録して保存する
+            {t("ctaSignup")}
           </Link>
         </div>
       </section>
 
-      {/* フッター */}
       <footer className="py-8 px-4 border-t border-[#3a3a46]">
-        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-zinc-500 max-w-2xl mx-auto">
+        <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-sm text-zinc-500 max-w-2xl mx-auto">
           <Link href="/privacy" className="hover:text-[#27AE60] transition-colors">
-            プライバシーポリシー
+            {t("privacyPolicy")}
           </Link>
           <Link href="/terms" className="hover:text-[#27AE60] transition-colors">
-            利用規約
+            {t("terms")}
           </Link>
           <Link href="/contact" className="hover:text-[#27AE60] transition-colors">
-            お問い合わせ
+            {t("contact")}
           </Link>
+          <span className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setLocale("ja")}
+              className={`hover:text-[#27AE60] transition-colors ${locale === "ja" ? "text-[#27AE60] font-medium" : ""}`}
+            >
+              日本語
+            </button>
+            <span className="text-zinc-600">|</span>
+            <button
+              type="button"
+              onClick={() => setLocale("en")}
+              className={`hover:text-[#27AE60] transition-colors ${locale === "en" ? "text-[#27AE60] font-medium" : ""}`}
+            >
+              English
+            </button>
+          </span>
         </div>
         <p className="text-center text-zinc-600 text-xs mt-4">© 2026 Tap4</p>
       </footer>

@@ -4,12 +4,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/lib/authStore";
+import { useTranslation } from "@/lib/i18n/useTranslation";
 
 const inputClass =
   "w-full px-3 py-2 rounded-lg border border-zinc-600 bg-zinc-800/50 text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500";
 
 export function SignupForm() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { signUpWithEmail, loading, error, clearError } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +27,7 @@ export function SignupForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">メールアドレス</label>
+        <label className="block text-sm text-zinc-400 mb-1">{t("emailLabel")}</label>
         <input
           type="email"
           value={email}
@@ -33,13 +35,13 @@ export function SignupForm() {
             setEmail(e.target.value);
             clearError();
           }}
-          placeholder="example@email.com"
+          placeholder={t("emailPlaceholderExample")}
           className={inputClass}
           required
         />
       </div>
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">パスワード（6文字以上）</label>
+        <label className="block text-sm text-zinc-400 mb-1">{t("passwordLabelLong")}</label>
         <input
           type="password"
           value={password}
@@ -47,7 +49,7 @@ export function SignupForm() {
             setPassword(e.target.value);
             clearError();
           }}
-          placeholder="パスワード"
+          placeholder={t("passwordLabel")}
           className={inputClass}
           minLength={6}
           required
@@ -59,12 +61,12 @@ export function SignupForm() {
         disabled={loading || !email.trim() || password.length < 6}
         className="w-full py-3 rounded-lg bg-[#27AE60] text-white font-medium hover:bg-[#229954] disabled:opacity-50"
       >
-        {loading ? "登録中..." : "アカウント作成"}
+        {loading ? t("processing") : t("createAccount")}
       </button>
       <p className="text-center text-sm text-zinc-500">
-        すでにアカウントをお持ちの方は
+        {t("alreadyHaveAccount")}{" "}
         <Link href="/login" className="text-[#27AE60] underline ml-1">
-          ログイン
+          {t("login")}
         </Link>
       </p>
     </form>
@@ -73,6 +75,7 @@ export function SignupForm() {
 
 export function LoginForm() {
   const router = useRouter();
+  const { t } = useTranslation();
   const { signInWithEmail, loading, error, clearError } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -88,7 +91,7 @@ export function LoginForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">メールアドレス</label>
+        <label className="block text-sm text-zinc-400 mb-1">{t("emailLabel")}</label>
         <input
           type="email"
           value={email}
@@ -96,13 +99,13 @@ export function LoginForm() {
             setEmail(e.target.value);
             clearError();
           }}
-          placeholder="example@email.com"
+          placeholder={t("emailPlaceholderExample")}
           className={inputClass}
           required
         />
       </div>
       <div>
-        <label className="block text-sm text-zinc-400 mb-1">パスワード</label>
+        <label className="block text-sm text-zinc-400 mb-1">{t("passwordLabel")}</label>
         <input
           type="password"
           value={password}
@@ -110,7 +113,7 @@ export function LoginForm() {
             setPassword(e.target.value);
             clearError();
           }}
-          placeholder="パスワード"
+          placeholder={t("passwordLabel")}
           className={inputClass}
           required
         />
@@ -121,17 +124,17 @@ export function LoginForm() {
         disabled={loading || !email.trim() || !password}
         className="w-full py-3 rounded-lg bg-[#27AE60] text-white font-medium hover:bg-[#229954] disabled:opacity-50"
       >
-        {loading ? "ログイン中..." : "ログイン"}
+        {loading ? t("processing") : t("login")}
       </button>
       <p className="text-center text-sm text-zinc-500">
-        アカウントをお持ちでない方は
+        {t("noAccount")}{" "}
         <Link href="/signup" className="text-[#27AE60] underline ml-1">
-          新規登録
+          {t("signupLink")}
         </Link>
       </p>
       <p className="text-center">
         <Link href="/login/forgot" className="text-xs text-zinc-500 underline">
-          パスワードを忘れた方
+          {t("forgotPasswordLink")}
         </Link>
       </p>
     </form>

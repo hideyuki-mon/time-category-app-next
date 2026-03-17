@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { CATEGORIES, type CategoryId } from "@/lib/constants/categories";
 import { useTimerStore } from "@/lib/stores/timerStore";
+import { useTranslation } from "@/lib/i18n/useTranslation";
 import { db } from "@/lib/db";
 import { formatTime, formatDate } from "@/lib/utils/time";
 import { today } from "@/lib/utils/time";
 
 export function TodaySummaryScreen() {
+  const { t, categoryName } = useTranslation();
   const { todayTotals, loadTodayTotals } = useTimerStore();
   const [memo, setMemo] = useState("");
 
@@ -31,7 +33,7 @@ export function TodaySummaryScreen() {
 
   const total = [0, 1, 2, 3].reduce((s, c) => s + (todayTotals[c as CategoryId] ?? 0), 0);
   const chartData = CATEGORIES.map((cat) => ({
-    name: cat.name,
+    name: categoryName(cat.id),
     value: todayTotals[cat.id] ?? 0,
     color: cat.color,
   })).filter((d) => d.value > 0);
@@ -47,7 +49,7 @@ export function TodaySummaryScreen() {
     >
       {/* 1. アプリタイトル（中央） */}
       <h2 className="text-lg font-bold text-center pt-6 pb-2 text-white">
-        時間カテゴリ管理アプリ
+        {t("appTitle")}
       </h2>
 
       {/* 2. 日付（カレンダーアイコン + 日付、中央） */}
@@ -79,7 +81,7 @@ export function TodaySummaryScreen() {
           </ResponsiveContainer>
         ) : (
           <div className="flex flex-col items-center justify-center h-48 text-zinc-500 text-sm">
-            <span className="mb-2">データがありません</span>
+            <span className="mb-2">{t("noData")}</span>
           </div>
         )}
       </div>
@@ -99,10 +101,10 @@ export function TodaySummaryScreen() {
         </div>
       )}
 
-      {/* 5. 合計時間（中央） 「合計 0:02」形式 */}
+      {/* 5. 合計時間（中央） */}
       <div className="text-center mb-4">
         <span className="text-sm text-zinc-400">
-          合計 <span className="font-semibold text-white tabular-nums">{formatTime(total)}</span>
+          {t("total")} <span className="font-semibold text-white tabular-nums">{formatTime(total)}</span>
         </span>
       </div>
 
@@ -124,7 +126,7 @@ export function TodaySummaryScreen() {
                   className="w-3 h-3 rounded-full flex-shrink-0"
                   style={{ backgroundColor: cat.color }}
                 />
-                <span className="text-zinc-100">{cat.name}</span>
+                <span className="text-zinc-100">{categoryName(cat.id)}</span>
               </div>
               <span className="tabular-nums text-zinc-300" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {formatTime(v)} ({pct}%)
@@ -134,17 +136,17 @@ export function TodaySummaryScreen() {
         })}
       </div>
 
-      {/* 8. 今日のひとこと（吹き出しアイコン + ラベル、左揃え） */}
+      {/* 8. 今日のひとこと */}
       <div className="px-4 pb-24">
         <label className="flex items-center gap-2 text-sm text-zinc-100 mb-2">
           <span>💬</span>
-          今日のひとこと
+          {t("todayMemo")}
         </label>
         <textarea
           value={memo}
           onChange={(e) => setMemo(e.target.value)}
           onBlur={handleMemoBlur}
-          placeholder="振り返りメモを入力..."
+          placeholder={t("memoPlaceholder")}
           className="w-full p-3 rounded-lg border border-zinc-600 bg-zinc-800/50 text-zinc-100 min-h-[80px] focus:outline-none focus:ring-2 focus:ring-zinc-500 placeholder:text-zinc-500"
         />
       </div>

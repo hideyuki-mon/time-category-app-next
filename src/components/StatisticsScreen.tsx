@@ -13,6 +13,7 @@ import {
   Cell,
 } from "recharts";
 import { CATEGORIES, type CategoryId } from "@/lib/constants/categories";
+import { useTranslation } from "@/lib/i18n/useTranslation";
 import { db } from "@/lib/db";
 import { formatHM, daysAgo, shortDate, toHours } from "@/lib/utils/time";
 
@@ -24,6 +25,7 @@ interface ChartItem {
 }
 
 export function StatisticsScreen() {
+  const { t, categoryName } = useTranslation();
   const [period, setPeriod] = useState<Period>("day");
   const [data, setData] = useState<ChartItem[]>([]);
   const [averages, setAverages] = useState<Record<CategoryId, number>>({
@@ -161,7 +163,7 @@ export function StatisticsScreen() {
                 : "bg-zinc-800 text-zinc-400"
             }`}
           >
-            {p === "day" ? "日" : p === "week" ? "週" : "月"}
+            {p === "day" ? t("day") : p === "week" ? t("week") : t("month")}
           </button>
         ))}
       </div>
@@ -183,7 +185,7 @@ export function StatisticsScreen() {
             <Tooltip formatter={(v) => formatHM(typeof v === 'number' ? v : 0)} />
             <Legend />
             {CATEGORIES.map((cat, i) => (
-              <Bar key={cat.id} dataKey={cat.id} stackId="a" name={cat.name} fill={cat.color}>
+              <Bar key={cat.id} dataKey={cat.id} stackId="a" name={categoryName(cat.id)} fill={cat.color}>
                 {data.map((_, idx) => (
                   <Cell key={idx} fill={cat.color} />
                 ))}
@@ -193,18 +195,18 @@ export function StatisticsScreen() {
         </ResponsiveContainer>
       </div>
       <div className="space-y-2">
-        <div className="text-sm text-zinc-400">期間の平均</div>
+        <div className="text-sm text-zinc-400">{t("periodAverage")}</div>
         {CATEGORIES.map((cat) => (
           <div key={cat.id} className="flex items-center justify-between text-sm">
             <span
               className="w-3 h-3 rounded-full inline-block mr-2"
               style={{ backgroundColor: cat.color }}
             />
-            {cat.name}: {formatHM(averages[cat.id])}
+            {categoryName(cat.id)}: {formatHM(averages[cat.id])}
           </div>
         ))}
         <div className="pt-2 font-semibold">
-          合計平均: {formatHM(totalAvg)}
+          {t("totalAverage")} {formatHM(totalAvg)}
         </div>
       </div>
     </div>

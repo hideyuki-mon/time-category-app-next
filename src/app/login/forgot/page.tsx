@@ -3,8 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/lib/authStore";
+import { useTranslation } from "@/lib/i18n/useTranslation";
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslation();
   const { sendPasswordReset, loading, error, successMessage, clearError } = useAuthStore();
   const [email, setEmail] = useState("");
 
@@ -18,12 +20,10 @@ export default function ForgotPasswordPage() {
     <div className="min-h-screen bg-[#1a1a22] text-[#e8e8f0] flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <Link href="/login" className="text-[#27AE60] text-sm hover:underline mb-4 inline-block">
-          ← ログインに戻る
+          {t("backToLogin")}
         </Link>
-        <h1 className="text-xl font-bold text-white mb-2">パスワードをリセット</h1>
-        <p className="text-zinc-400 text-sm mb-4">
-          登録したメールアドレスを入力してください。パスワードリセット用のメールを送信します。
-        </p>
+        <h1 className="text-xl font-bold text-white mb-2">{t("resetPasswordTitle")}</h1>
+        <p className="text-zinc-400 text-sm mb-4">{t("resetPasswordDesc")}</p>
         {successMessage ? (
           <div className="bg-[#27AE60]/20 border border-[#27AE60]/50 rounded-lg p-4">
             <p className="text-[#27AE60] text-sm">{successMessage}</p>
@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
                 setEmail(e.target.value);
                 clearError();
               }}
-              placeholder="メールアドレス"
+              placeholder={t("emailPlaceholder")}
               className="w-full px-3 py-2 rounded-lg border border-zinc-600 bg-zinc-800/50 text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500"
               required
             />
@@ -47,7 +47,7 @@ export default function ForgotPasswordPage() {
               disabled={loading || !email.trim()}
               className="w-full py-3 rounded-lg bg-[#27AE60] text-white font-medium hover:bg-[#229954] disabled:opacity-50"
             >
-              {loading ? "送信中..." : "リセットメールを送信"}
+              {loading ? t("sending") : t("sendResetEmail")}
             </button>
           </form>
         )}

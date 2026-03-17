@@ -1,15 +1,17 @@
 "use client";
 
 import { useUIStore } from "@/lib/stores/uiStore";
+import { useTranslation } from "@/lib/i18n/useTranslation";
 
-const TABS = [
-  { id: "measurement" as const, label: "計測", icon: "⏱️" },
-  { id: "today" as const, label: "今日", icon: "📊" },
-  { id: "statistics" as const, label: "統計", icon: "📈" },
-  { id: "settings" as const, label: "設定", icon: "⚙️" },
+const TAB_IDS = [
+  { id: "measurement" as const, key: "tabMeasurement" as const, icon: "⏱️" },
+  { id: "today" as const, key: "tabToday" as const, icon: "📊" },
+  { id: "statistics" as const, key: "tabStatistics" as const, icon: "📈" },
+  { id: "settings" as const, key: "tabSettings" as const, icon: "⚙️" },
 ];
 
 export function TabBar() {
+  const { t } = useTranslation();
   const { currentTab, setTab } = useUIStore();
 
   return (
@@ -17,7 +19,7 @@ export function TabBar() {
       className="fixed bottom-0 left-0 right-0 bg-[#24242e] border-t border-[#3a3a46] flex justify-around py-2 safe-bottom"
       style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
     >
-      {TABS.map((tab) => (
+      {TAB_IDS.map((tab) => (
         <button
           key={tab.id}
           type="button"
@@ -29,7 +31,7 @@ export function TabBar() {
           }`}
         >
           <span className="text-lg">{tab.icon}</span>
-          <span className="text-xs font-medium">{tab.label}</span>
+          <span className="text-xs font-medium">{t(tab.key)}</span>
         </button>
       ))}
     </nav>
